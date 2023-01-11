@@ -1,13 +1,16 @@
 //props: { author: string, content: string}
 import { ArticleNyTimes } from 'phosphor-react';
+import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
+
+
 export function Post(props){
     return (
         <article className={styles.post}>
             <header>
                 <div className={styles.author}>
-                    <img className={styles.avatar} src="https://avatars.githubusercontent.com/u/31410871?v=" alt="" />
+                    <Avatar src="https://avatars.githubusercontent.com/u/31410871?v=" alt="" />
                     <div className={styles.authorInfo}>
                         <strong>Marcos Albrecht</strong>
                         <span>Developer</span>
