@@ -1,33 +1,44 @@
 //props: { author: string, content: string}
+import { format, formatDistanceToNow } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 import { ArticleNyTimes } from 'phosphor-react';
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
 
 
-export function Post(props){
+export function Post({ author, publishedAt, content }){
+    const publishedDateFormatted = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {locale: ptBR})
+
+    const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+        locale: ptBR,
+        addSuffix: true,
+    })
+
     return (
         <article className={styles.post}>
             <header>
                 <div className={styles.author}>
-                    <Avatar src="https://avatars.githubusercontent.com/u/31410871?v=" alt="" />
+                    <Avatar src={author.avatarUrl} alt="" />
                     <div className={styles.authorInfo}>
-                        <strong>Marcos Albrecht</strong>
-                        <span>Developer</span>
+                        <strong>{author.name}</strong>
+                        <span>{author.role}</span>
                     </div>
                 </div>
 
-                <time title="29 de dezembro às 14:20h" dateTime="2022-12-29 14:20:00">Publicado há 1h</time>
+                <time title={publishedDateFormatted} dateTime={publishedAt.toISOString()}>
+                    {publishedDateRelativeToNow}
+                </time>
             </header>
 
             <div className={styles.content} >
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
-                    <p><a href="#">marcos.design.</a></p> 
-                    <p><a href="#">#novoprojeto</a>{' '}
-                        <a href="#">#nlw</a>{' '}
-                        <a href="#">#rocketseat</a>{' '}
-                    </p>
-                
+                {content.map(line => {
+                    if (line.type === 'paragraph') {
+                        return <p>{line.content}</p>
+                    }else if (line.type === 'link') {
+                        return <p><a href="#">{line.content}</a></p>    
+                    }
+                })}                
             </div>
 
             <form className={styles.commentForm}>
